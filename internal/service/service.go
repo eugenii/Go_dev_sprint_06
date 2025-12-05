@@ -1,26 +1,50 @@
 package service
 
 import (
-	"fmt"
 	"strings"
 
-	"pkg/morse"
+	morse "github.com/Yandex-Practicum/go1fl-sprint6-final/pkg/morse"
 )
 
-const text = "АБВГДЕЁЖЗИЙКЛМНОПРССТУФХЦЧШЩЪЫЬЭЮЯ!1234567890)(,:;%@\\|/"
+func AutoDetectAndConvert(data string) (string, error) {
+	// Проверяем, является ли строка кодом Морзе
+	isMorse := isMorseCode(data)
 
-func Decode(input string) string {
-	input = strings.ToUpper(input)
-
-	if len(input) == 0 {
-		fmt.Println("input is empty")
-		return ""
-	}
-
-	if strings.ContainsAny(input, text) {
-		return morse.ToMorse(input)
+	if isMorse {
+		// Конвертируем Морзе в текст
+		text := morse.ToText(data)
+		return text, nil
 	} else {
-		return morse.ToText(input)
+		// Конвертируем текст в Морзе
+		// Приводим к верхнему регистру для работы с пакетом morse
+		upperText := strings.ToUpper(strings.TrimSpace(data))
+		morseCode := morse.ToMorse(upperText)
+		return morseCode, nil
+	}
+}
+
+func isMorseCode(data string) bool {
+	trimmed := strings.TrimSpace(data)
+	if trimmed == "" {
+		return false
 	}
 
+	// Проверяем, содержит ли строка только символы Морзе
+	// Допустимые символы: точка, тире, пробел, табуляция, переносы строк
+	for _, r := range trimmed {
+		if !(r == '.' || r == '-' || r == ' ' || r == '\t' || r == '\n' || r == '\r') {
+			return false
+		}
+	}
+
+	// Дополнительная проверка: если есть хотя бы один символ Морзе
+	// (точка или тире), считаем что это код Морзе
+	for _, r := range trimmed {
+		if r == '.' || r == '-' {
+			return true
+		}
+	}
+
+	// Только пробелы - не Морзе
+	return false
 }
