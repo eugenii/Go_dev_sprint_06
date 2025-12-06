@@ -1,23 +1,24 @@
 package main
 
 import (
-	"flag"
-	"fmt"
+	"log"
+	"os"
 
 	server "github.com/Yandex-Practicum/go1fl-sprint6-final/internal/server"
 )
 
 func main() {
-	// Парсим аргументы командной строки
-	port := flag.String("port", "8080", "Порт для запуска сервера")
-	flag.Parse()
+	// Создаем логгер
+	logger := log.New(os.Stdout, "MORSE: ", log.Ldate|log.Ltime)
 
-	fmt.Println("=== Конвертер азбуки Морзе ===")
-	fmt.Println("Автоматически определяет и конвертирует:")
-	fmt.Println("- Текст → код Морзе")
-	fmt.Println("- Код Морзе → текст")
-	fmt.Println()
+	// Создаем сервер
+	srv := server.NewServer(logger)
 
 	// Запускаем сервер
-	server.Start(*port)
+	logger.Println("Запуск конвертера азбуки Морзе...")
+	logger.Println("Сервер доступен по адресу: http://localhost:8080")
+
+	if err := srv.ListenAndServe(); err != nil {
+		logger.Fatal("Ошибка сервера: ", err)
+	}
 }
