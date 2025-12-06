@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -14,9 +13,9 @@ import (
 
 // Init инициализирует обработчики с логгером
 
-func InitHandlers(l *log.Logger) {
-	logger = l
-}
+// func InitHandlers(l *log.Logger) {
+// 	logger = l
+// }
 
 var ProjectRoot string
 
