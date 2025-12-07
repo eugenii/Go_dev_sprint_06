@@ -109,7 +109,9 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
 		"Конвертация завершена!\n"+
 			"Исходный файл: %s\n"+
 			"Результат сохранен в: %s\n\n"+
-			"Результат конвертации:\n%s",
+			"Результат конвертации:\n%s"+
+			"Исходный текст:\n%s",
+		content,
 		header.Filename,
 		outputFilename,
 		converted,
